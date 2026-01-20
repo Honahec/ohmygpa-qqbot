@@ -1,6 +1,6 @@
-# Forum Sync Plugin
+# OhMyGPA QQBot Plugin
 
-A Nonebot2 plugin for CourseBench QQBot that automatically synchronizes relevant group chat messages to OhMyGPA forum.
+A Nonebot2 plugin for OhMyGPA QQBot that automatically synchronizes relevant group chat messages to the forum.
 
 ## Introduction
 
