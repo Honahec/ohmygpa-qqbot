@@ -15,11 +15,13 @@ __plugin_meta__ = PluginMetadata(
 
 plugin_config = get_plugin_config(Config)
 
+
 def check_group_rule(event: GroupMessageEvent) -> bool:
     if not plugin_config.target_group_ids:
         # allow all
-        return True 
+        return True
     return event.group_id in plugin_config.target_group_ids
+
 
 # Rule to check if message text contains relevant keywords to save token usage
 def keyword_check(event: GroupMessageEvent) -> bool:
@@ -28,21 +30,25 @@ def keyword_check(event: GroupMessageEvent) -> bool:
         return True
     return any(keyword in text for keyword in plugin_config.sync_keywords)
 
+
 # Matcher
-message_syncer = on_message(rule=Rule(check_group_rule) & Rule(keyword_check), priority=10, block=False)
+message_syncer = on_message(
+    rule=Rule(check_group_rule) & Rule(keyword_check), priority=10, block=False
+)
+
 
 @message_syncer.handle()
 async def handle_message(bot: Bot, event: GroupMessageEvent):
     text = event.get_plaintext()
     user_id = event.user_id
-    
+
     # 1. Analyze with LLM
     summary = await analyze_and_summarize(text, user_id, plugin_config)
-    
+
     # if summary:
     #     # 2. Upload to Forum
     #     success = await post_to_forum(summary, plugin_config)
-        
+
     #     if success:
     #         await message_syncer.finish(f"检测到交易/求助信息，已自动同步至论坛！\n摘要：{summary.splitlines()[0]}")
     #     else:
